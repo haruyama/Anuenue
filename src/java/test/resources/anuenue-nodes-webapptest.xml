@@ -1,0 +1,21 @@
+<?xml version='1.0'  encoding='utf-8'?>
+<nodes>
+  <masters>
+    <master iname="node2">
+      <host>localhost</host>
+      <port>4040</port>
+    </master>
+    <master iname="node3">
+      <host>localhost</host>
+      <port>3030</port>
+   </master>
+  </masters>
+  <slaves>
+    <slave>
+      <ref>node2</ref>
+    </slave>
+    <slave>
+      <ref>node3</ref>
+    </slave>
+  </slaves>
+</nodes>

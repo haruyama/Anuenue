@@ -1,0 +1,31 @@
+<?xml version='1.0'  encoding='utf-8'?>
+<nodes>
+  <mergers>
+    <merger>
+        <ref>node1</ref>
+    </merger>
+    <merger>
+        <ref>node2</ref>
+    </merger>
+  </mergers>
+  <masters>
+    <master iname="node1">
+      <host>bbbb</host>
+      <port>7983</port>
+    </master>
+    <master iname="node2">
+      <host>cccc</host>
+      <port>7983</port>
+   </master>
+  </masters>
+  <slaves>
+    <slave>
+        <ref>node1</ref>
+    </slave>
+    <slave>
+      <host>eeee</host>
+      <port>6983</port>
+      <replicate>node2</replicate>
+    </slave>
+  </slaves>
+</nodes>

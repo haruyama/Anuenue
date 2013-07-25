@@ -1,0 +1,4 @@
+blogid	author	genre	content
+39209	伊藤敬彦	Hadoop	hadoop っていいよね。
+83904	岐阜太郎	Lucene	Lucene って検索エンジンのインデクスなんだよ
+43894	山田花子	Maven	maven っていいよね。ビルドが簡単だ〜

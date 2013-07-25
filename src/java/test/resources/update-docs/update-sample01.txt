@@ -1,0 +1,4 @@
+blogid	author	genre	content
+39209	伊藤敬彦	Hadoop	hadoop は良かった。
+83904	岐阜太郎	Lucene	Lucene は良かった。
+43894	山田花子	Maven	maven  は良かった。

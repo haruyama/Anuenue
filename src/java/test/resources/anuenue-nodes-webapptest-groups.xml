@@ -1,0 +1,24 @@
+<?xml version='1.0'  encoding='utf-8'?>
+<nodes>
+  <masters>
+    <master iname="master1">
+      <host>localhost</host>
+      <port>4040</port>
+    </master>
+  </masters>
+  <slaves group="slaves1">
+    <slave>
+      <host>localhost</host>
+      <port>3030</port>
+      <replicate>master1</replicate>
+    </slave>
+  </slaves>
+  <slaves group="slaves2">
+    <slave>
+      <host>localhost</host>
+      <port>2020</port>
+      <replicate>master1</replicate>
+    </slave>
+  </slaves>
+</nodes>
+
