@@ -1,0 +1,137 @@
+
+#anuenue-logo {
+	margin-top:20px;
+	margin-bottom:20px;
+	margin-right:10px;
+	margin-left:10px;
+	height: 100;
+	width: 300;
+}
+
+body {
+	background-image: url("block.jpg");
+	text-align: center;
+	color: #404040;
+	font-family: Arial, monospace;
+	margin-top: 0;
+	margin-bottom: 0;
+	padding-bottom: 0;
+}
+
+h1 {
+    text-align: center;
+    border-bottom: groove 2px #ff9900;
+    width: 50%;
+    font-size: 2em;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+
+li {
+	list-style-position: inside;
+    list-style: none;
+}
+
+#instance_list {
+    margin-top: 10;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+li.host_info {
+    text-align: left;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 10;
+    list-style: none;
+}
+
+.instance_name {
+	border-style: solid;
+	border-bottom-width: 1px;
+	border-bottom-color: #8b795e;
+	border-left: 0px;
+	border-right: 0px;
+	border-top: 0px;
+	margin-left: auto;
+	margin-right: auto;
+	padding-bottom: 3px;
+	margin-bottom: 4px;
+	width: 80%;
+}
+
+.instance_info li {
+    text-align: left;
+    margin-right: auto;
+    margin-left: auto;
+}
+
+ul.instance_info {
+    width: 40%;	
+    text-align: center;
+    margin-right: auto;
+    margin-left: auto;	
+    border-bottom: 2px;
+    border-top: 2px;
+    border-left: 0px;
+    border-right: 0px;    
+    border-style: dotted;
+    border-color: #5c5c5c;
+    margin-right: auto;
+    margin-left: auto;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    padding: 10px;	
+}
+
+div.host_region {
+    width: 40%;	
+    border-bottom-color: #ff9900;
+    border-bottom: 2px;
+    border-top: 2px;
+    border-left: 0px;
+    border-right: 0px;    
+    border-style: dashed;
+    margin-right: auto;
+    margin-left: auto;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    padding: 10px;
+}
+
+#input_region {
+    width: 40%;
+    text-align: left;
+    margin-right: auto;
+    margin-left: auto;
+    margin-bottom: 50px;
+    margin-top: 30px;	
+}
+
+#input_region textarea {
+    width: 70%;	
+    float: left;
+    margin-right: auto;
+    margin-left: auto;
+}
+
+#input_region input {
+    float: right;
+    width: 25%;
+    margin-right: auto;
+    margin-left: auto;		
+}
+
+#container {
+    width: 70%;
+    background-color: #eee8cd;
+    margin-right: auto;
+    margin-left: auto;
+    margin-top: 0;
+    margin-bottom: 0;
+    padding: 10px;
+    border-left: solid 10px #8b795e;
+    border-right: solid 10px #8b795e;
+    float: inherit;
+}
