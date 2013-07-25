@@ -5,7 +5,7 @@
 *.war
 *.ear
 
-webapps
+webapps/anuenue.war
 .project
 conf
 build
