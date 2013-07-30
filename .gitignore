@@ -1,6 +1,21 @@
 *.class
 
 # Package Files #
-*.jar
-*.war
 *.ear
+
+/webapps/anuenue.war
+.project
+/conf
+/build
+.classpath
+/bin
+.checkstyle
+.pmd
+.settings
+tmp
+junit*
+/solr
+/contexts
+/resources
+/logs/*
+/work/*

@@ -1,0 +1,4 @@
+blogid	author	genre	content
+4830849	先生	Hadoop	Hadoop。。。おそろしい子
+689685	彗星	Solr	Solr 1.4 は 1.3 よりも 3倍速い。しらんけど
+8345	CGIファン	Maven	 pom ファイルは黒魔術のようだ

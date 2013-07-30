@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<schema name="anuenue example" version="1.5">
+  <types>
+    <!-- default field types -->
+    <fieldType name="string"  class="solr.StrField"        sortMissingLast="true" omitNorms="true"/>
+    <fieldType name="boolean" class="solr.BoolField"       sortMissingLast="true" omitNorms="true"/>
+    <fieldtype name="binary"  class="solr.BinaryField"/>
+    <fieldType name="int"     class="solr.TrieIntField"    precisionStep="0" omitNorms="true" positionIncrementGap="0"/>
+    <fieldType name="float"   class="solr.TrieFloatField"  precisionStep="0" omitNorms="true" positionIncrementGap="0"/>
+    <fieldType name="long"    class="solr.TrieLongField"   precisionStep="0" omitNorms="true" positionIncrementGap="0"/>
+    <fieldType name="double"  class="solr.TrieDoubleField" precisionStep="0" omitNorms="true" positionIncrementGap="0"/>
+    <fieldType name="tint"    class="solr.TrieIntField"    precisionStep="8" omitNorms="true" positionIncrementGap="0"/>
+    <fieldType name="tfloat"  class="solr.TrieFloatField"  precisionStep="8" omitNorms="true" positionIncrementGap="0"/>
+    <fieldType name="tlong"   class="solr.TrieLongField"   precisionStep="8" omitNorms="true" positionIncrementGap="0"/>
+    <fieldType name="tdouble" class="solr.TrieDoubleField" precisionStep="8" omitNorms="true" positionIncrementGap="0"/>
+    <fieldType name="date"    class="solr.TrieDateField"   omitNorms="true" precisionStep="0" positionIncrementGap="0"/>
+    <fieldType name="tdate"   class="solr.TrieDateField"   omitNorms="true" precisionStep="6" positionIncrementGap="0"/>
+    <fieldType name="pint"    class="solr.IntField"        omitNorms="true"/>
+    <fieldType name="plong"   class="solr.LongField"       omitNorms="true"/>
+    <fieldType name="pfloat"  class="solr.FloatField"      omitNorms="true"/>
+    <fieldType name="pdouble" class="solr.DoubleField"     omitNorms="true"/>
+    <fieldType name="pdate"   class="solr.DateField"        sortMissingLast="true" omitNorms="true"/>
+    <fieldType name="random"  class="solr.RandomSortField"     indexed="true" />
+    <fieldtype name="ignored" stored="false" indexed="false" multiValued="true" class="solr.StrField" />
+    <fieldType name="uuid" class="solr.UUIDField" indexed="true" />
+
+    <fieldType name="string_ci" class="solr.TextField" sortMissingLast="true" omitNorms="true">
+      <analyzer>
+        <tokenizer class="solr.KeywordTokenizerFactory"/>
+        <filter class="solr.LowerCaseFilterFactory"/>
+      </analyzer>
+    </fieldType>
+
+    <fieldType name="text_ws" class="solr.TextField" positionIncrementGap="100">
+      <analyzer>
+        <tokenizer class="solr.WhitespaceTokenizerFactory"/>
+      </analyzer>
+    </fieldType>
+
+    <fieldType name="text_ja" class="solr.TextField" positionIncrementGap="100" autoGeneratePhraseQueries="false">
+      <analyzer>
+        <charFilter class="solr.MappingCharFilterFactory" mapping="mapping-fullwidth-digit.txt" />
+        <tokenizer class="solr.JapaneseTokenizerFactory" mode="search"/>
+        <!--<tokenizer class="solr.JapaneseTokenizerFactory" mode="search" userDictionary="lang/userdict_ja.txt"/>-->
+        <filter class="solr.JapaneseBaseFormFilterFactory"/>
+        <!--<filter class="solr.JapanesePartOfSpeechStopFilterFactory" tags="lang/stoptags_ja.txt"/>-->
+        <filter class="solr.CJKWidthFilterFactory"/>
+        <!--<filter class="solr.StopFilterFactory" ignoreCase="true" words="lang/stopwords_ja.txt"/>-->
+        <filter class="solr.JapaneseKatakanaStemFilterFactory" minimumLength="4"/>
+        <filter class="solr.LowerCaseFilterFactory"/>
+      </analyzer>
+    </fieldType>
+
+    <fieldType name="text_cjk" class="solr.TextField" positionIncrementGap="100">
+      <analyzer>
+        <tokenizer class="solr.StandardTokenizerFactory"/>
+        <filter class="solr.CJKWidthFilterFactory"/>
+        <filter class="solr.LowerCaseFilterFactory"/>
+        <filter class="solr.CJKBigramFilterFactory"/>
+        <filter class="solr.WordDelimiterFilterFactory"/>
+      </analyzer>
+    </fieldType>
+    <!-- A general text field that has reasonable, generic
+         cross-language defaults: it tokenizes with StandardTokenizer,
+   removes stop words from case-insensitive "stopwords.txt"
+   (empty by default), and down cases.  At query time only, it
+   also applies synonyms. -->
+    <fieldType name="text_general" class="solr.TextField" positionIncrementGap="100">
+      <analyzer type="index">
+        <tokenizer class="solr.StandardTokenizerFactory"/>
+        <filter class="solr.StopFilterFactory" ignoreCase="true" words="stopwords.txt" />
+        <!-- in this example, we will only use synonyms at query time
+        <filter class="solr.SynonymFilterFactory" synonyms="index_synonyms.txt" ignoreCase="true" expand="false"/>
+        -->
+        <filter class="solr.LowerCaseFilterFactory"/>
+      </analyzer>
+      <analyzer type="query">
+        <tokenizer class="solr.StandardTokenizerFactory"/>
+        <filter class="solr.StopFilterFactory" ignoreCase="true" words="stopwords.txt" />
+        <filter class="solr.SynonymFilterFactory" synonyms="synonyms.txt" ignoreCase="true" expand="true"/>
+        <filter class="solr.LowerCaseFilterFactory"/>
+      </analyzer>
+    </fieldType>
+
+    <fieldType name="text_ja_gosen" class="solr.TextField" positionIncrementGap="100" autoGeneratePhraseQueries="false">
+      <analyzer>
+        <tokenizer class="solr.GosenTokenizerFactory"/>
+        <filter class="solr.CJKWidthFilterFactory"/>
+        <filter class="solr.LowerCaseFilterFactory"/>
+        <!--<filter class="solr.EdgeNGramFilterFactory" minGramSize="1" maxGramSize="10" />-->
+      </analyzer>
+    </fieldType>
+
+    <fieldType name="keyword" class="solr.TextField" positionIncrementGap="100">
+      <analyzer>
+        <tokenizer class="solr.KeywordTokenizerFactory"/>
+      </analyzer>
+    </fieldType>
+
+    <fieldType name="text_cjk_plus" class="solr.TextField" positionIncrementGap="100">
+      <analyzer>
+        <tokenizer class="jp.co.mixi.rd.lucene.analysis.StandardPlusTokenizerFactory"/>
+        <filter class="solr.CJKWidthFilterFactory"/>
+        <filter class="solr.LowerCaseFilterFactory"/>
+        <filter class="solr.CJKBigramFilterFactory"/>
+        <filter class="solr.WordDelimiterFilterFactory" preserveOriginal="1"/>
+      </analyzer>
+    </fieldType>
+
+  </types>
+
+  <fields>
+    <field name="blogid"   type="int"           indexed="true" stored="true" required="true" />
+    <field name="title"    type="text_ja" indexed="true" stored="true" />
+    <field name="author"   type="text_ja" indexed="true" stored="true"  multiValued="false" omitNorms="true"/>
+    <field name="content"  type="text_ja_gosen" indexed="true" stored="true"  multiValued="false" />
+    <field name="genre"    type="string"        indexed="true" stored="true"  multiValued="true"  omitNorms="true" />
+
+    <field name="_version_" type="long" indexed="true" stored="true"/>
+
+    <dynamicField name="*_i"  type="int"    indexed="true"  stored="true"/>
+    <dynamicField name="*_s"  type="string"  indexed="true"  stored="true"/>
+    <dynamicField name="*_l"  type="long"   indexed="true"  stored="true"/>
+    <dynamicField name="*_b"  type="boolean" indexed="true"  stored="true"/>
+    <dynamicField name="*_f"  type="float"  indexed="true"  stored="true"/>
+    <dynamicField name="*_d"  type="double" indexed="true"  stored="true"/>
+
+
+    <dynamicField name="*_ti" type="tint"    indexed="true"  stored="true"/>
+    <dynamicField name="*_tl" type="tlong"   indexed="true"  stored="true"/>
+    <dynamicField name="*_tf" type="tfloat"  indexed="true"  stored="true"/>
+    <dynamicField name="*_td" type="tdouble" indexed="true"  stored="true"/>
+    <dynamicField name="*_tdt" type="tdate"  indexed="true"  stored="true"/>
+
+    <dynamicField name="ignored_*" type="ignored" multiValued="true"/>
+    <dynamicField name="random_*" type="random" />
+
+    <!-- catchall field, containing all other searchable text fields (implemented
+   via copyField further on in this schema  -->
+    <field name="text" type="text_ja" indexed="true" stored="false" multiValued="true"/>
+
+  </fields>
+
+  <uniqueKey>blogid</uniqueKey>
+
+  <copyField source="title"   dest="text"/>
+  <copyField source="author"  dest="text"/>
+  <copyField source="content" dest="text"/>
+  <copyField source="genre"   dest="text"/>
+
+</schema>

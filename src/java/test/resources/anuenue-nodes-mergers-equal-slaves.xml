@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<nodes>
+  <masters>
+    <master iname="master1">
+      <host>localhost</host>
+      <port>18983</port>
+    </master>
+  </masters>
+  <slaves group="group1">
+    <slave iname="slave1">
+      <host>localhost</host>
+      <port>7983</port>
+      <replicate>master1</replicate>
+    </slave>
+  </slaves>
+  <slaves group="group2">
+    <slave iname="slave2">
+      <host>localhost</host>
+      <port>6983</port>
+      <replicate>master1</replicate>
+    </slave>
+  </slaves>
+</nodes>

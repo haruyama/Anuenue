@@ -1,0 +1,234 @@
+<project name="anuenue" default="main" xmlns:ivy="antlib:org.apache.ivy.ant">
+
+  <!-- ================================================================== -->
+  <!-- properties and settings                                            -->
+  <!-- ================================================================== -->
+
+  <!-- file and directory names -->
+  <property name="version" value="0.8.5" />
+  <property name="solr.version" value="4.4.0" />
+  <property name="lib.dir" value="${basedir}/lib" />
+  <property name="anuenue.lib.dir" value="${basedir}/anuenue-lib" />
+  <property name="conf.dir" value="${basedir}/conf" />
+  <property name="contexts.dir" value="${basedir}/contexts" />
+  <property name="solr.dir" value="${basedir}/solr" />
+  <property name="resources.dir" value="${basedir}/resources" />
+  <property name="src.dir" location="${basedir}/src" />
+  <property name="bin.dir" location="${basedir}/bin" />
+  <property name="log.dir" location="${basedir}/logs" />
+  <property name="indexdata.dir" location="${basedir}/data" />
+  <property name="build.dir" location="${basedir}/build" />
+  <property name="webapps.dir" location="${basedir}/webapps" />
+  <property name="reports.dir" location="${build.dir}/reports" />
+  <property name="src.conf.dir" location="${src.dir}/conf" />
+  <property name="src.contexts.dir" location="${src.dir}/contexts" />
+  <property name="src.solr.dir" location="${src.dir}/solr" />
+  <property name="src.resources.dir" location="${src.dir}/resources" />
+  <property name="core.src.dir" location="${src.dir}/java/core" />
+  <property name="test.src.dir" location="${src.dir}/java/test" />
+  <property name="test.resources.dir" location="${test.src.dir}/resources" />
+  <property name="core.build.dir" location="${build.dir}/core" />
+  <property name="test.build.dir" location="${build.dir}/test" />
+  <property name="test.build.conf.dir" location="${test.build.dir}/conf" />
+  <property name="test.build.solr.dir" location="${test.build.dir}/solr" />
+  <property name="test.build.bin.dir" location="${test.build.dir}/bin" />
+  <property name="test.build.webapps.dir" location="${test.build.dir}/webapps" />
+  <property name="test.build.resources.dir" location="${test.build.dir}/resources" />
+  <property name="anuenue.jar" value="${anuenue.lib.dir}/anuenue-${version}.jar" />
+  <property name="webapp.web.dir" location="${basedir}/src/webapp/web" />
+  <property name="webapp.build.dir" location="${build.dir}/webapp" />
+
+  <!-- ivy properties -->
+  <property name="ivy.dir" location="${basedir}/ivy" />
+  <property name="ivy.version" value="2.3.0" />
+  <property name="ivy.jar.file" value="${ivy.dir}/ivy-${ivy.version}.jar" />
+  <property name="build.ivy.dir" location="${build.dir}/ivy" />
+  <property name="ivy.artifact.retrieve.pattern" value="${ant.project.name}/[conf]/[artifact]-[revision].[ext]" />
+  <property name="ivy.lib.dir" value="${build.ivy.dir}/lib/${ant.project.name}" />
+  <property name="common.ivy.lib.dir" location="${ivy.lib.dir}/common" />
+  <property name="ivy.url" value="http://repo1.maven.org/maven2/org/apache/ivy/ivy" />
+  <property name="build.ivy.dir" location="${build.dir}/ivy" />
+  <property name="build.ivy.lib.dir" location="${build.ivy.dir}/lib" />
+
+  <!-- classpath -->
+  <path id="classpath">
+    <fileset dir="${lib.dir}">
+      <include name="**/*.jar" />
+    </fileset>
+    <fileset dir="${anuenue.lib.dir}">
+      <include name="*.jar" />
+    </fileset>
+    <path refid="ivy-common-classpath" />
+    <pathelement location="${test.build.dir}" />
+  </path>
+
+  <path id="test-classpath">
+    <path refid="classpath" />
+    <path refid="ivy-test-classpath" />
+    <pathelement location="${test.build.dir}" />
+  </path>
+
+  <!-- ================================================================== -->
+  <!-- targets                                                            -->
+  <!-- ================================================================== -->
+
+  <target name="main" depends="build, test" description="Main target">
+  </target>
+
+  <target name="init" depends="retrieve-common">
+    <mkdir dir="${build.dir}" />
+    <mkdir dir="${core.build.dir}" />
+    <mkdir dir="${test.build.dir}" />
+    <mkdir dir="${test.build.webapps.dir}" />
+    <mkdir dir="${test.build.resources.dir}" />
+    <mkdir dir="${webapp.build.dir}" />
+    <mkdir dir="${reports.dir}" />
+    <mkdir dir="${webapps.dir}" />
+    <copy todir="${conf.dir}">
+      <fileset dir="${src.conf.dir}" excludes="**/.svn"/>
+    </copy>
+    <copy todir="${contexts.dir}">
+      <fileset dir="${src.contexts.dir}" excludes="**/.svn"/>
+    </copy>
+    <copy todir="${solr.dir}">
+      <fileset dir="${src.solr.dir}" excludes="**/.svn"/>
+    </copy>
+    <copy todir="${resources.dir}">
+      <fileset dir="${src.resources.dir}" excludes="**/.svn"/>
+    </copy>
+    <copy todir="${bin.dir}">
+      <fileset dir="${src.dir}/bin" excludes="**/.svn"/>
+    </copy>
+  </target>
+
+  <target name="build" depends="build-core, build-webapp" />
+
+  <target name="build-core" description="Compilation target" depends="init">
+    <javac includeantruntime="false" srcdir="${core.src.dir}" debug="off" includes="**/*.java" verbose="off" debuglevel="lines,vars,source" classpathref="classpath" destdir="${core.build.dir}">
+      <compilerarg value="-Xlint:deprecation" />
+      <compilerarg value="-Xlint:unchecked" />
+    </javac>
+    <delete>
+      <fileset dir="${anuenue.lib.dir}" includes="anuenue-*.jar"/>
+    </delete>
+    <jar jarfile="${anuenue.jar}" basedir="${core.build.dir}" />
+  </target>
+
+  <target name="test-deploy" description="deploy the resources for testing">
+    <copy todir="${test.build.conf.dir}">
+      <fileset dir="${src.conf.dir}" excludes="**/.svn"/>
+    </copy>
+    <copy todir="${test.build.solr.dir}">
+      <fileset dir="${src.solr.dir}" excludes="**/.svn"/>
+    </copy>
+    <copy todir="${test.build.webapps.dir}">
+      <fileset dir="${webapps.dir}" excludes="**/.svn"/>
+    </copy>
+    <copy todir="${test.build.bin.dir}">
+      <fileset dir="${src.dir}/bin" excludes="**/.svn"/>
+    </copy>
+  </target>
+
+  <target name="test" depends="test-core" />
+
+  <target name="test-core" depends="retrieve-test, build-core, build-webapp, test-deploy">
+    <javac includeantruntime="false" srcdir="${test.src.dir}" debug="on" includes="**/*.java" verbose="off" classpathref="test-classpath" destdir="${test.build.dir}">
+      <compilerarg value="-Xlint:deprecation" />
+      <compilerarg value="-Xlint:unchecked" />
+    </javac>
+    <copy todir="${test.build.resources.dir}">
+      <fileset dir="${test.resources.dir}" excludes="**/.svn"/>
+      <fileset dir="${src.resources.dir}" excludes="**/.svn"/>
+    </copy>
+    <junit printsummary="true" fork="${junit.fork}" maxmemory="512m" dir="${test.build.dir}" showoutput="false" haltonfailure="yes">
+      <classpath refid="test-classpath" />
+      <formatter type="xml" />
+      <batchtest fork="yes" todir="${reports.dir}">
+        <fileset dir="${test.build.dir}" includes="**/Test*.class" />
+      </batchtest>
+    </junit>
+  </target>
+
+  <target name="build-webapp" depends="build-core" description="generate WAR file">
+    <war destfile="${webapps.dir}/anuenue.war" webxml="${webapp.web.dir}/WEB-INF/web.xml">
+      <fileset dir="${webapp.web.dir}" />
+    </war>
+  </target>
+
+  <target name="clean" description="Deletes build products">
+    <delete dir="${build.dir}/test" />
+    <delete dir="${build.dir}/webapp-test" />
+  </target>
+
+  <target name="clean-all" depends="clean" description="Deletes all build products">
+    <delete dir="${conf.dir}" />
+    <delete dir="${contexts.dir}" />
+    <delete dir="${solr.dir}" />
+    <delete dir="${bin.dir}" />
+    <delete file="${webapps.dir}/anuenue.war" />
+    <delete dir="${build.dir}" />
+    <delete dir="${indexdata.dir}" />
+    <delete dir="${log.dir}" includes="**/*" />
+    <delete>
+      <fileset dir="." includes="**/*~" />
+    </delete>
+  </target>
+
+  <!-- ================================================================== -->
+  <!-- optional targets                                                   -->
+  <!-- ================================================================== -->
+
+  <target name="download-ivy" unless="ivy.skip">
+    <mkdir dir="${ivy.dir}" />
+    <echo message="installing ivy..." />
+    <get src="${ivy.url}/${ivy.version}/ivy-${ivy.version}.jar" dest="${ivy.jar.file}" usetimestamp="true" />
+  </target>
+
+  <target name="install-ivy" depends="download-ivy, init-ivy">
+    <path id="ivy.lib.path">
+      <fileset dir="${ivy.dir}" includes="**/*.jar" />
+    </path>
+    <taskdef resource="org/apache/ivy/ant/antlib.xml" uri="antlib:org.apache.ivy.ant" classpathref="ivy.lib.path" />
+  </target>
+
+  <target name="ivy-resolve-common" depends="install-ivy">
+    <ivy:settings file="${ivy.dir}/ivy-settings.xml" />
+    <ivy:resolve conf="common" />
+  </target>
+
+  <target name="retrieve-common" depends="ivy-resolve-common">
+    <ivy:retrieve pattern="${build.ivy.lib.dir}/${ivy.artifact.retrieve.pattern}" />
+    <ivy:cachepath pathid="ivy-common-classpath" conf="common" />
+  </target>
+
+  <target name="retrieve-test" depends="install-ivy, ivy-resolve-test">
+    <ivy:retrieve pattern="${build.ivy.lib.dir}/${ivy.artifact.retrieve.pattern}" />
+    <ivy:cachepath pathid="ivy-test-classpath" conf="test" />
+  </target>
+
+  <target name="ivy-resolve-test" depends="init-ivy">
+    <ivy:resolve conf="test" />
+  </target>
+
+  <target name="clean-cache" description="clean cache" depends="init-ivy">
+    <ivy:cleancache />
+  </target>
+
+  <target name="check-ivy">
+    <condition property="ivy.skip">
+      <typefound uri="antlib:org.apache.ivy.ant" name="cleancache" />
+    </condition>
+  </target>
+
+  <target name="init-ivy" depends="download-ivy,check-ivy" unless="ivy.skip">
+    <typedef uri="antlib:org.apache.ivy.ant" onerror="fail" loaderRef="ivyLoader">
+      <classpath>
+        <pathelement location="${ivy.jar.file}" />
+      </classpath>
+    </typedef>
+  </target>
+
+  <target name="clean-ivy" depends="clean, clean-cache">
+    <delete dir="${ivy.jar.file}" />
+  </target>
+</project>

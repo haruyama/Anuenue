@@ -1,0 +1,43 @@
+<?xml version='1.0'  encoding='utf-8'?>
+<nodes>
+  <mergers>
+    <merger>
+      <host>aaaa</host>
+      <port>18983</port>
+    </merger>
+  </mergers>
+  <masters>
+    <master iname="node2">
+      <host>aaaa</host>
+      <port>7983</port>
+    </master>
+    <master iname="node3">
+      <host>bbbb</host>
+      <port>7983</port>
+   </master>
+  </masters>
+  <slaves>
+    <slave>
+      <host>aaaa</host>
+      <port>6983</port>
+      <replicate>node2</replicate>
+    </slave>
+    <slave>
+      <host>bbbb</host>
+      <port>6983</port>
+      <replicate>node3</replicate>
+    </slave>
+  </slaves>
+  <backups>
+    <backup>
+      <host>aaaa</host>
+      <port>5983</port>
+      <replicate>node2</replicate>
+    </backup>
+    <backup>
+      <host>bbbb</host>
+      <port>5983</port>
+      <replicate>node3</replicate>
+    </backup>
+  </backups>
+</nodes>
