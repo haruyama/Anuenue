@@ -19,3 +19,7 @@ junit*
 /resources
 /logs/*
 /work/*
+/anuenue-lib/anuenue-*.jar
+/ivy/ivy-*.jar
+
+*~

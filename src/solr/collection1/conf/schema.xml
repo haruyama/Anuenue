@@ -84,6 +84,7 @@
 
     <fieldType name="text_ja_gosen" class="solr.TextField" positionIncrementGap="100" autoGeneratePhraseQueries="false">
       <analyzer>
+        <charFilter class="solr.MappingCharFilterFactory" mapping="mapping-halfwidth-symbol.txt" />
         <tokenizer class="solr.GosenTokenizerFactory"/>
         <filter class="solr.CJKWidthFilterFactory"/>
         <filter class="solr.LowerCaseFilterFactory"/>
@@ -116,7 +117,8 @@
     <field name="content"  type="text_ja_gosen" indexed="true" stored="true"  multiValued="false" />
     <field name="genre"    type="string"        indexed="true" stored="true"  multiValued="true"  omitNorms="true" />
 
-    <field name="_version_" type="long" indexed="true" stored="true"/>
+    <field name="_version_" type="long"   indexed="true" stored="true"/>
+    <field name="_root_"    type="string" indexed="true" stored="false"/>
 
     <dynamicField name="*_i"  type="int"    indexed="true"  stored="true"/>
     <dynamicField name="*_s"  type="string"  indexed="true"  stored="true"/>
