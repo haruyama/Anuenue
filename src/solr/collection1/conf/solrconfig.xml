@@ -35,7 +35,7 @@
        that you fully re-index after changing this setting as it can
        affect both how text is indexed and queried.
   -->
-  <luceneMatchVersion>4.5</luceneMatchVersion>
+  <luceneMatchVersion>4.6</luceneMatchVersion>
 
   <!-- <lib/> directives can be used to instruct Solr to load an Jars
        identified and use them to resolve any "plugins" specified in
@@ -1459,9 +1459,6 @@
   <searchComponent name="clustering"
                    enable="${solr.clustering.enabled:false}"
                    class="solr.clustering.ClusteringComponent" >
-    <!-- Declare a named clustering engine. Only one engine can be named 
-         "default" (and it becomes the default one for the search component). 
-      -->
     <lst name="engine">
       <str name="name">lingo</str>
 
