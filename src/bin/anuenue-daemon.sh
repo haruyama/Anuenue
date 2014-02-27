@@ -88,7 +88,7 @@ fi
 
 # run COMMAND
 if [ "$COMMAND"  = "start" ] ; then
-    nc localhost $ANUENUE_STOP_PORT -w 1
+    echo a | nc localhost $ANUENUE_STOP_PORT 2> /dev/null
     if [ $? -ne 1 ] ; then
         error "Error: stop port already in use?: $ANUENUE_STOP_PORT"
     fi

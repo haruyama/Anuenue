@@ -35,7 +35,7 @@
        that you fully re-index after changing this setting as it can
        affect both how text is indexed and queried.
   -->
-  <luceneMatchVersion>4.6</luceneMatchVersion>
+  <luceneMatchVersion>4.7</luceneMatchVersion>
 
   <!-- <lib/> directives can be used to instruct Solr to load an Jars
        identified and use them to resolve any "plugins" specified in
@@ -119,7 +119,19 @@
        persistent, and doesn't work with replication.
     -->
   <directoryFactory name="DirectoryFactory"
-                    class="${solr.directoryFactory:solr.NRTCachingDirectoryFactory}"/>
+                    class="${solr.directoryFactory:solr.NRTCachingDirectoryFactory}">
+
+    <!-- These will be used if you are using the solr.HdfsDirectoryFactory,
+           otherwise they will be ignored. If you don't plan on using hdfs,
+           you can safely remove this section. -->      
+    <!-- The root directory that collection data should be written to. -->     
+    <str name="solr.hdfs.home">${solr.hdfs.home:}</str>
+    <!-- The hadoop configuration files to use for the hdfs client. -->    
+    <str name="solr.hdfs.confdir">${solr.hdfs.confdir:}</str>
+    <!-- Enable/Disable the hdfs cache. -->    
+    <str name="solr.hdfs.blockcache.enabled">${solr.hdfs.blockcache.enabled:true}</str>
+
+  </directoryFactory> 
 
   <!-- The CodecFactory for defining the format of the inverted index.
        The default implementation is SchemaCodecFactory, which is the official Lucene
@@ -929,7 +941,15 @@
 
   <!-- realtime get handler, guaranteed to return the latest stored fields of
        any document, without the need to commit or open a new searcher.  The
-       current implementation relies on the updateLog feature being enabled. -->
+       current implementation relies on the updateLog feature being enabled.
+
+       ** WARNING **
+       Do NOT disable the realtime get handler at /get if you are using
+       SolrCloud otherwise any leader election will cause a full sync in ALL
+       replicas for the shard in question. Similarly, a replica recovery will
+       also always fetch the complete index from the leader because a partial
+       sync will not be possible in the absence of this handler.
+  -->
   <requestHandler name="/get" class="solr.RealTimeGetHandler">
      <lst name="defaults">
        <str name="omitHeader">true</str>
@@ -1068,12 +1088,12 @@
   </requestHandler>
 
   <!-- for back compat with clients using /update/json and /update/csv -->
-  <requestHandler name="/update/json" class="solr.JsonUpdateRequestHandler">
+  <requestHandler name="/update/json" class="solr.UpdateRequestHandler">
         <lst name="defaults">
          <str name="stream.contentType">application/json</str>
        </lst>
   </requestHandler>
-  <requestHandler name="/update/csv" class="solr.CSVRequestHandler">
+  <requestHandler name="/update/csv" class="solr.UpdateRequestHandler">
         <lst name="defaults">
          <str name="stream.contentType">application/csv</str>
        </lst>
@@ -1173,7 +1193,9 @@
      <requestHandler name="/admin/file"       class="solr.admin.ShowFileRequestHandler" >
     -->
   <!-- If you wish to hide files under ${solr.home}/conf, explicitly
-       register the ShowFileRequestHandler using:
+       register the ShowFileRequestHandler using the definition below. 
+       NOTE: The glob pattern ('*') is the only pattern supported at present, *.xml will
+             not exclude all files ending in '.xml'. Use it to exclude _all_ updates
     -->
   <!--
      <requestHandler name="/admin/file"
@@ -1181,10 +1203,16 @@
        <lst name="invariants">
          <str name="hidden">synonyms.txt</str>
          <str name="hidden">anotherfile.txt</str>
+         <str name="hidden">*</str>
        </lst>
      </requestHandler>
     -->
 
+  <!--
+    Enabling this request handler (which is NOT a default part of the admin handler) will allow the Solr UI to edit
+    all the config files. This is intended for secure/development use ONLY! Leaving available and publically
+    accessible is a security vulnerability and should be done with extreme caution!
+  -->
   <!-- ping/healthcheck -->
   <requestHandler name="/admin/ping" class="solr.PingRequestHandler">
     <lst name="invariants">
@@ -1555,7 +1583,6 @@
   <searchComponent name="terms" class="solr.TermsComponent"/>
 
   <!-- A request handler for demonstrating the terms component -->
-  <requestHandler name="/js" class="org.apache.solr.handler.js.JavaScriptRequestHandler" startup="lazy"/>
   <requestHandler name="/terms" class="solr.SearchHandler" startup="lazy">
      <lst name="defaults">
       <bool name="terms">true</bool>

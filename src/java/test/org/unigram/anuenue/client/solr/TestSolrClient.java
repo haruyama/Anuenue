@@ -172,51 +172,6 @@ public final class TestSolrClient {
         }
     }
 
-    /**
-     * Test updateTSVViaStreamFile().
-     */
-    @Test
-    public void testUpdateTSVViaStreamFile() {
-
-        Server server = null;
-        String dataDir = "data-test-stream-file-updater1";
-
-        try {
-            String host = "localhost";
-            int port = 18983;
-            // start Solr
-            server = SimpleAnuenueInstanceFactory.createSolrInstance(port,
-                    dataDir, NODE_CONF_FILE);
-            HttpUnitOptions.setExceptionsThrownOnScriptError(false);
-            assertSame(0, AnuenueTestUtil.getNumberOfIndexedDocumentViaSolr(host, port));
-
-            // post a TSV file
-            SolrClient client = new SolrClient(host, port);
-            client.updateTSVViaStreamFile("resources/example-docs/add-sample01.txt");
-
-            assertSame(0, AnuenueTestUtil.getNumberOfIndexedDocumentViaSolr(host, port));
-            client.updateXML(XML_COMMIT);
-            assertSame(3, AnuenueTestUtil.getNumberOfIndexedDocumentViaSolr(host, port));
-
-            // post another TSV file
-            client.updateTSVViaStreamFile("resources/example-docs/add-sample02.txt");
-            assertSame(3, AnuenueTestUtil.getNumberOfIndexedDocumentViaSolr(host, port));
-            client.updateXML(XML_COMMIT);
-            assertSame(6, AnuenueTestUtil.getNumberOfIndexedDocumentViaSolr(host, port));
-
-            // encapsulator
-            client.updateTSVViaStreamFile("resources/example-encapsulator-docs/add-sample04.txt");
-            assertSame(6, AnuenueTestUtil.getNumberOfIndexedDocumentViaSolr(host, port));
-            client.updateXML(XML_COMMIT);
-            assertSame(13, AnuenueTestUtil.getNumberOfIndexedDocumentViaSolr(host, port));
-
-        } catch (Exception e) {
-            fail();
-        } finally {
-            AnuenueTestUtil.stopServerQuietly(server);
-            assertTrue(FileUtils.deleteQuietly(new File(dataDir)));
-        }
-    }
 
     /**
      * Test ping().
