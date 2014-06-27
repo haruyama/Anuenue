@@ -35,7 +35,7 @@
        that you fully re-index after changing this setting as it can
        affect both how text is indexed and queried.
   -->
-  <luceneMatchVersion>4.8</luceneMatchVersion>
+  <luceneMatchVersion>4.9</luceneMatchVersion>
 
   <!-- <lib/> directives can be used to instruct Solr to load an Jars
        identified and use them to resolve any "plugins" specified in
@@ -335,6 +335,13 @@
          this is enabled here, and controlled through log4j.properties.
       -->
       <infoStream>true</infoStream>
+
+    <!--
+        Use true to enable this safety check, which can help
+        reduce the risk of propagating index corruption from older segments 
+        into new ones, at the expense of slower merging.
+    -->
+     <checkIntegrityAtMerge>false</checkIntegrityAtMerge>
   </indexConfig>
 
 
