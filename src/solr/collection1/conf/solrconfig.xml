@@ -35,9 +35,9 @@
        that you fully re-index after changing this setting as it can
        affect both how text is indexed and queried.
   -->
-  <luceneMatchVersion>4.9</luceneMatchVersion>
+  <luceneMatchVersion>4.10.0</luceneMatchVersion>
 
-  <!-- <lib/> directives can be used to instruct Solr to load an Jars
+  <!-- <lib/> directives can be used to instruct Solr to load any Jars
        identified and use them to resolve any "plugins" specified in
        your solrconfig.xml or schema.xml (ie: Analyzers, Request
        Handlers, etc...).
@@ -336,12 +336,12 @@
       -->
       <infoStream>true</infoStream>
 
-    <!--
-        Use true to enable this safety check, which can help
-        reduce the risk of propagating index corruption from older segments 
-        into new ones, at the expense of slower merging.
-    -->
-     <checkIntegrityAtMerge>false</checkIntegrityAtMerge>
+     <!--
+         Use true to enable this safety check, which can help
+         reduce the risk of propagating index corruption from older segments 
+         into new ones, at the expense of slower merging.
+     -->
+      <checkIntegrityAtMerge>false</checkIntegrityAtMerge>
   </indexConfig>
 
 
@@ -969,6 +969,27 @@
      </lst>
   </requestHandler>
 
+  <!--
+    The export request handler is used to export full sorted result sets.
+    Do not change these defaults.
+  -->
+
+  <requestHandler name="/export" class="solr.SearchHandler">
+    <lst name="invariants">
+      <str name="rq">{!xport}</str>
+      <str name="wt">xsort</str>
+      <str name="distrib">false</str>
+    </lst>
+
+    <arr name="components">
+      <str>query</str>
+    </arr>
+  </requestHandler>
+
+
+
+
+
 
   <!-- A Robust Example
 
@@ -1010,6 +1031,7 @@
 
        <!-- Faceting defaults -->
        <str name="facet">on</str>
+       <str name="facet.missing">true</str>
        <str name="facet.field">cat</str>
        <str name="facet.field">manu_exact</str>
        <str name="facet.field">content_type</str>
@@ -1037,6 +1059,7 @@
        <!-- Highlighting defaults -->
        <str name="hl">on</str>
        <str name="hl.fl">content features title name</str>
+       <str name="hl.preserveMulti">true</str>
        <str name="hl.encoder">html</str>
        <str name="hl.simple.pre">&lt;b&gt;</str>
        <str name="hl.simple.post">&lt;/b&gt;</str>
@@ -1098,7 +1121,7 @@
        -->
   </requestHandler>
 
-  <!-- for back compat with clients using /update/json and /update/csv -->
+  <!-- The following are implicitly added
   <requestHandler name="/update/json" class="solr.UpdateRequestHandler">
         <lst name="defaults">
          <str name="stream.contentType">application/json</str>
@@ -1109,6 +1132,7 @@
          <str name="stream.contentType">application/csv</str>
        </lst>
   </requestHandler>
+  -->
 
   <!-- Solr Cell Update Request Handler
 
@@ -1284,7 +1308,7 @@
     </lst>
     <lst name="slave">
       <str name="enable">${enable.slave:false}</str>
-      <str name="masterUrl">${solr.replication.master.url:http://localhost:8983/solr/replication}</str>
+      <str name="masterUrl">${solr.replication.master.url:http://localhost:8983/solr}</str>
       <str name="pollInterval">00:00:60</str>
     </lst>
   </requestHandler>

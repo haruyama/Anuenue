@@ -5,8 +5,8 @@
   <!-- ================================================================== -->
 
   <!-- file and directory names -->
-  <property name="version" value="4.9.0" />
-  <property name="solr.version" value="4.9.0" />
+  <property name="version" value="4.10.0" />
+  <property name="solr.version" value="4.10.0" />
   <property name="lib.dir" value="${basedir}/lib" />
   <property name="anuenue.lib.dir" value="${basedir}/anuenue-lib" />
   <property name="conf.dir" value="${basedir}/conf" />
